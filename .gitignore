@@ -1,0 +1,22 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+Thumbs.db
+
+# User projects (sample project is explicitly included below)
+projects/*
+!projects/iriuniverse2-launch/
+!projects/iriuniverse2-launch/**
+
+# Regenerable intermediate renders (keep final.mp4, stock, vo)
+projects/*/renders/segments/
+projects/*/renders/draft*.mp4
+projects/*/renders/draft_muxed.mp4
+projects/*/renders/*_list.txt
+projects/*/renders/vo_concat.mp3
+
+# Local reference junction (optional on your machine)
+reference/BioEnable-Videos/

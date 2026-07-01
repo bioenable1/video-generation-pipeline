@@ -1,0 +1,39 @@
+{
+  "segments": [
+    {
+      "scene_id": "s01",
+      "text": "Large-scale identity programs demand speed, accuracy, and trust. For Aadhaar enrollment and national ID projects, every capture must meet the highest standards — without slowing operators down.",
+      "target_duration_sec": 14
+    },
+    {
+      "scene_id": "s02",
+      "text": "Introducing IriUniverse Two from BioEnable — an STQC certified dual iris scanner engineered for Aadhaar enrollment. A binocular design that subjects position easily, with minimal guidance.",
+      "target_duration_sec": 14
+    },
+    {
+      "scene_id": "s03",
+      "text": "Capture both irises in under one second. Images meet or exceed ISO nineteen seven ninety-four dash six. Automatic iris detection, built-in quality checks, and liveness detection help prevent spoofing.",
+      "target_duration_sec": 15
+    },
+    {
+      "scene_id": "s04",
+      "text": "No training required. Unaffected by ambient lighting. IP sixty-five dust and water resistant. Compliant with eye safety standards, ANSI, NIST, and ISO image interchange formats.",
+      "target_duration_sec": 14
+    },
+    {
+      "scene_id": "s05",
+      "text": "Deploy for voter registration, ID document issuance, law enforcement, large-scale enrollment, and e-KYC. Quick enrollment built for programs that register thousands — every day.",
+      "target_duration_sec": 15
+    },
+    {
+      "scene_id": "s06",
+      "text": "Lightweight under one kilogram. USB certified interface. Works on Windows, Linux, and Android. SDK available for integrators building custom enrollment solutions.",
+      "target_duration_sec": 14
+    },
+    {
+      "scene_id": "s07",
+      "text": "IriUniverse Two — identify, automate, track. Request your demo today at bioenabletech.com. BioEnable Technologies — your partner in trusted biometric enrollment.",
+      "target_duration_sec": 14
+    }
+  ]
+}

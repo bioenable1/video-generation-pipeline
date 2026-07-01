@@ -1,0 +1,17 @@
+{
+  "mode": "free",
+  "description": "Set mode to 'paid' to use ElevenLabs, VEED, and fal.ai. Default is free/local.",
+  "free": {
+    "tts": "edge-tts",
+    "voice": "en-US-ChristopherNeural",
+    "editor": "ffmpeg",
+    "stock": "pexels",
+    "subtitle_burn": true
+  },
+  "paid": {
+    "tts": "elevenlabs",
+    "editor": "veed",
+    "ai_video": "fal.fabric",
+    "stock": "pexels"
+  }
+}

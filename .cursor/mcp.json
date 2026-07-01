@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "rube": {
+      "url": "https://rube.app/mcp"
+    },
+    "pexels": {
+      "command": "npx",
+      "args": ["-y", "pexels-mcp-server"],
+      "env": {
+        "PEXELS_API_KEY": "${PEXELS_API_KEY}"
+      }
+    }
+  }
+}

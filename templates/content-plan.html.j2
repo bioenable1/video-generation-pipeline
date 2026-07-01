@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} — Content Plan</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --card: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --success: #22c55e;
+      --border: #2d3a4f;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    h2 {
+      font-size: 1.25rem;
+      color: var(--accent);
+      margin: 2rem 0 1rem;
+      border-left: 3px solid var(--accent);
+      padding-left: 0.75rem;
+    }
+    h3 { font-size: 1rem; margin: 1rem 0 0.5rem; color: var(--muted); }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+    .badge {
+      display: inline-block;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .scene-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .scene-id { font-weight: 700; color: var(--accent); }
+    .duration { color: var(--muted); font-size: 0.85rem; }
+    .visual-type {
+      background: #1e3a5f;
+      color: #93c5fd;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+    blockquote {
+      border-left: 3px solid var(--border);
+      padding-left: 1rem;
+      margin: 0.5rem 0;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .hook { border-color: var(--success); }
+    .cta { border-color: #f59e0b; }
+    ul { margin-left: 1.25rem; margin-top: 0.5rem; }
+    li { margin-bottom: 0.35rem; }
+    .approval {
+      background: #1a2e1a;
+      border: 1px solid var(--success);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .approval strong { color: var(--success); }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+    th, td { text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{ title }}</h1>
+    <p class="meta">
+      <span class="badge">{{ product }}</span>
+      <span class="badge">{{ duration_target_sec }}s</span>
+      <span class="badge">{{ aspect_ratio }}</span>
+      <span class="badge">{{ tone }}</span>
+    </p>
+    {% if generated_at %}
+    <p class="meta">Generated: {{ generated_at }}</p>
+    {% endif %}
+  </header>
+
+  <section>
+    <h2>Executive Summary</h2>
+    <div class="card">{{ executive_summary }}</div>
+  </section>
+
+  <section>
+    <h2>Hook Options</h2>
+    {% for hook in hook_options %}
+    <div class="card hook">
+      <strong>Option {{ loop.index }}</strong>
+      <blockquote>{{ hook }}</blockquote>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section>
+    <h2>Chapter Outline</h2>
+    <ol>
+      {% for chapter in chapters %}
+      <li><strong>{{ chapter.title }}</strong> — {{ chapter.summary }} ({{ chapter.duration_sec }}s)</li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  <section>
+    <h2>Scene Breakdown</h2>
+    {% for scene in scenes %}
+    <div class="card">
+      <div class="scene-header">
+        <span class="scene-id">{{ scene.id }}</span>
+        <span>
+          <span class="visual-type">{{ scene.visual.type }}</span>
+          <span class="duration">{{ scene.duration_sec }}s</span>
+        </span>
+      </div>
+      {% if scene.on_screen_text %}
+      <h3>On-screen text</h3>
+      <p><strong>{{ scene.on_screen_text }}</strong></p>
+      {% endif %}
+      <h3>Narration</h3>
+      <blockquote>{{ scene.narration }}</blockquote>
+      <h3>Visual intent</h3>
+      <p>{{ scene.visual.intent or scene.visual.query or scene.visual.prompt or 'TBD' }}</p>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section>
+    <h2>Call to Action</h2>
+    <div class="card cta">{{ cta }}</div>
+  </section>
+
+  <section>
+    <h2>YouTube Metadata Draft</h2>
+    <table>
+      <tr><th>Title</th><td>{{ metadata.youtube_title }}</td></tr>
+      <tr><th>Description</th><td>{{ metadata.youtube_description }}</td></tr>
+      <tr><th>Tags</th><td>{{ metadata.tags | join(', ') }}</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Acceptance Criteria</h2>
+    <ul>
+      {% for criterion in acceptance_criteria %}
+      <li>{{ criterion }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <div class="approval">
+    <strong>Approval gate:</strong> Review this plan before production begins.
+    Set <code>approved: true</code> in <code>plan/shot-list.json</code> to proceed to asset generation.
+  </div>
+</body>
+</html>

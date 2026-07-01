@@ -1,0 +1,46 @@
+[0.0s] Modern airports connect our world, but
+[2.7s] this constant flow of people creates
+[4.9s] immense challenges for security and
+[7.3s] efficiency, impacting the entire travel
+[9.8s] experience.
+[10.9s] >> Manual verification creates significant
+[13.6s] bottlenecks. Long queues at checkpoints
+[16.5s] lead to frustration and delays,
+[18.7s] negatively impacting every passenger's
+[21.0s] journey. These manual checks are slow
+[23.6s] and prone to human error and forgery.
+[26.5s] This poses a significant vulnerability
+[29.1s] in our border security and puts everyone
+[31.8s] at risk. It's time for a smarter, safer
+[35.2s] way to travel. BioEnable introduces a
+[38.2s] new era in airport security with our
+[40.8s] next-generation biometric e-gate
+[43.2s] solution.
+[44.5s] We transform travel with a secure
+[46.4s] digital single token. Using biometrics,
+[49.5s] passengers move from check-in to the
+[51.3s] gate effortlessly after one
+[53.4s] verification. Enrollment is a simple
+[55.8s] one-time process. Our multimodal system
+[58.5s] securely captures facial, fingerprint,
+[61.0s] and iris data for a highly accurate
+[63.0s] profile. We secure your biometric data
+[65.7s] in three key stages. We capture
+[67.6s] information such as documents, facial
+[69.7s] scans, fingerprints, and iris data. This
+[72.7s] data is protected on the device using
+[75.0s] highest encryption standard. Finally,
+[77.0s] it's sent through a secure transmission
+[78.9s] using TLS 1.3 protocol, ensuring data is
+[82.6s] safe. Experience the future of border
+[85.2s] control. Our e-gates verify passenger
+[87.8s] identity with high-speed authentication,
+[90.2s] providing a contactless and completely
+[92.4s] secure passage. The benefits are clear.
+[95.6s] A superior passenger experience, up to
+[98.3s] 30% more throughput, and a dramatic
+[100.8s] enhancement in identity verification and
+[103.4s] overall security. Redefine your
+[106.0s] airport's potential. Partner with
+[108.0s] BioEnable to deliver world-class
+[110.1s] experience built on security and

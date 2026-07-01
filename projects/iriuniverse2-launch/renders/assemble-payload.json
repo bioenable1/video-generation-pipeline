@@ -1,0 +1,14 @@
+{
+  "project": "iriuniverse2-launch",
+  "title": "Iriuniverse 2 Product Overview",
+  "aspect_ratio": "16:9",
+  "clips": [
+    {
+      "scene_id": "s02",
+      "path": "C:\\development\\Video-Generation\\projects\\iriuniverse2-launch\\reference\\BioEnable-Videos\\kit and scanners\\Iriuniverse2_-VEED.mp4",
+      "duration_sec": 10,
+      "on_screen_text": "Iriuniverse 2"
+    }
+  ],
+  "subtitles": true
+}

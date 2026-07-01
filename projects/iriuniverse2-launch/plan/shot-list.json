@@ -1,0 +1,90 @@
+{
+  "id": "iriuniverse2-launch",
+  "title": "IriUniverse Two — STQC Certified Dual Iris Scanner | BioEnable",
+  "product": "IriUniverse Two",
+  "duration_target_sec": 105,
+  "aspect_ratio": "16:9",
+  "tone": "BioEnable corporate — problem-solution narrative (match E-Gate video style)",
+  "style_reference": "https://www.youtube.com/watch?v=d58Kduairis",
+  "approved": true,
+  "approved_at": "2026-07-01T18:00:00Z",
+  "scenes": [
+    {
+      "id": "s01",
+      "duration_sec": 18,
+      "narration": "National identity programs connect millions of citizens to essential services. But high-volume enrollment creates immense pressure on accuracy, speed, and security — impacting every operator and every person in the queue.",
+      "on_screen_text": "The enrollment challenge",
+      "visual": { "type": "stock_video", "catalog_key": "crowd_people" },
+      "bullets": ["Long queues", "Manual errors", "Security risk"]
+    },
+    {
+      "id": "s02",
+      "duration_sec": 14,
+      "narration": "Slow manual capture leads to frustration, rework, and rejected images. For border-grade identity programs, that is a vulnerability we cannot afford. It is time for a smarter, faster way to enroll.",
+      "on_screen_text": "A smarter way to enroll",
+      "visual": { "type": "stock_video", "catalog_key": "government_building" },
+      "bullets": []
+    },
+    {
+      "id": "s03",
+      "duration_sec": 16,
+      "narration": "BioEnable introduces IriUniverse Two — our STQC certified dual iris scanner built for Aadhaar enrollment and large-scale biometric programs.",
+      "on_screen_text": "IriUniverse Two | STQC Certified",
+      "visual": { "type": "product_image", "source_path": "assets/images/brochure/brochure-page1.png", "catalog_key": "technology_data" },
+      "bullets": ["BioEnable Technologies", "Dual Iris Scanner"]
+    },
+    {
+      "id": "s04",
+      "duration_sec": 18,
+      "narration": "Enrollment is intuitive. Subjects position themselves with minimal guidance. Our binocular design captures both irises in under one second — with automatic detection, quality checks, and liveness detection built in.",
+      "on_screen_text": "Dual capture in < 1 second",
+      "visual": { "type": "product_image", "source_path": "assets/images/website/web-01.png", "catalog_key": "eye_closeup" },
+      "bullets": ["No training required", "Liveness detection", "Auto positioning"]
+    },
+    {
+      "id": "s05",
+      "duration_sec": 16,
+      "narration": "We protect every enrollment with standards you can trust. Images meet ISO nineteen seven ninety-four dash six. IP sixty-five rugged design. Eye-safe operation. Compliant with ANSI, NIST, and ISO interchange formats.",
+      "on_screen_text": "Built for trust",
+      "visual": { "type": "product_image", "source_path": "assets/images/brochure/brochure-page3.png", "catalog_key": "server_room" },
+      "bullets": ["ISO 19794-6", "IP65 rugged", "Eye-safe"]
+    },
+    {
+      "id": "s06",
+      "duration_sec": 14,
+      "narration": "Experience faster enrollment camps. Contactless dual-iris capture that works in real lighting conditions — on Windows, Linux, and Android, with SDK support for integrators.",
+      "on_screen_text": "Faster camps. Fewer rejections.",
+      "visual": { "type": "stock_video", "catalog_key": "fingerprint_tech" },
+      "bullets": ["Voter registration", "e-KYC", "Law enforcement"]
+    },
+    {
+      "id": "s07",
+      "duration_sec": 12,
+      "narration": "The benefits are clear. Higher throughput, superior image quality, and enrollment your operators can run from day one — for voter ID, national programs, and large-scale identity projects.",
+      "on_screen_text": "Higher throughput | Day-one ready",
+      "visual": { "type": "stock_video", "catalog_key": "business_office" },
+      "bullets": ["Large-scale enrollment", "ID issuance", "Aadhaar ready"]
+    },
+    {
+      "id": "s08",
+      "duration_sec": 12,
+      "narration": "Redefine your enrollment potential. Partner with BioEnable. Request your demo at bioenabletech.com.",
+      "on_screen_text": "bioenabletech.com",
+      "visual": { "type": "logo_slate", "catalog_key": "technology_data" },
+      "bullets": ["sales@bioenabletech.com", "+91 9075010016"]
+    }
+  ],
+  "acceptance_criteria": [
+    "Follows problem-solution narrative like E-Gate reference video",
+    "Stock B-roll on problem and benefits scenes",
+    "Real IriUniverse product imagery on intro and how-it-works scenes",
+    "BioEnable branding on opener and closer",
+    "Duration 90-115 seconds",
+    "CTA bioenabletech.com in final scene"
+  ],
+  "metadata": {
+    "youtube_title": "IriUniverse Two Dual Iris Scanner | STQC Certified | BioEnable",
+    "youtube_description": "BioEnable IriUniverse Two — STQC certified dual iris scanner for Aadhaar enrollment.\n\n🔹 Sub-1-second dual iris capture\n🔹 ISO 19794-6 compliant\n🔹 Liveness detection & auto positioning\n🔹 IP65 rugged | Eye-safe\n🔹 Windows, Linux, Android + SDK\n\n📞 +91 9075010016 | sales@bioenabletech.com\n🌐 https://www.bioenabletech.com/iriuniverse-two-dual-iris-scanner\n\n#BioEnable #IriUniverseTwo #DualIrisScanner #STQC #Aadhaar #Biometrics",
+    "tags": ["BioEnable", "IriUniverse Two", "dual iris scanner", "STQC", "Aadhaar", "biometric enrollment"]
+  }
+}

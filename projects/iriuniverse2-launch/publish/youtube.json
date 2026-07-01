@@ -1,0 +1,8 @@
+{
+  "status": "pending",
+  "note": "Upload via Rube MCP YOUTUBE_UPLOAD_VIDEO after qa-report.md shows PASS. See docs/publish.md.",
+  "video_id": null,
+  "url": null,
+  "privacy": "unlisted",
+  "metadata_source": "plan/shot-list.json"
+}

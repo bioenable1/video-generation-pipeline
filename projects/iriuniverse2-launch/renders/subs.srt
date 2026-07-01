@@ -1,0 +1,27 @@
+1
+00:00:00,000 --> 00:00:15,936
+Large-scale identity programs demand speed, accuracy, and trust. For Aadhaar enr...
+
+2
+00:00:16,236 --> 00:00:31,403
+Introducing IriUniverse Two from BioEnable — an STQC certified dual iris scanner...
+
+3
+00:00:31,704 --> 00:00:48,167
+Capture both irises in under one second. Images meet or exceed ISO nineteen seve...
+
+4
+00:00:48,468 --> 00:01:04,980
+No training required. Unaffected by ambient lighting. IP sixty-five dust and wat...
+
+5
+00:01:05,280 --> 00:01:20,064
+Deploy for voter registration, ID document issuance, law enforcement, large-scal...
+
+6
+00:01:20,364 --> 00:01:36,012
+Lightweight under one kilogram. USB certified interface. Works on Windows, Linux...
+
+7
+00:01:36,312 --> 00:01:50,160
+IriUniverse Two — identify, automate, track. Request your demo today at bioenabl...

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720">
+  <rect width="1280" height="720" fill="#0f1419"/>
+  <rect x="40" y="40" width="1200" height="640" fill="#1a2332" stroke="#3b82f6" stroke-width="4"/>
+  <text x="640" y="300" font-family="system-ui,sans-serif" font-size="48" fill="#e7ecf3" text-anchor="middle">Iriuniverse 2</text>
+  <text x="640" y="380" font-family="system-ui,sans-serif" font-size="28" fill="#8b9cb3" text-anchor="middle">Iriuniverse 2 — Enterprise Iris Recognition Scanner | BioEna</text>
+  <text x="640" y="620" font-family="system-ui,sans-serif" font-size="20" fill="#3b82f6" text-anchor="middle">bioenable.com</text>
+</svg>

@@ -1,0 +1,26 @@
+{
+  "note": "Curated free stock (Mixkit/Pexels CDN). No API key required.",
+  "videos": {
+    "security_entrance": "https://assets.mixkit.co/videos/preview/mixkit-security-camera-surveilling-a-hall-4288-large.mp4",
+    "technology_data": "https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-monitor-close-up-1728-large.mp4",
+    "business_office": "https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4",
+    "crowd_people": "https://assets.mixkit.co/videos/preview/mixkit-people-walking-in-the-street-4374-large.mp4",
+    "eye_closeup": "https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-womans-blue-eye-4231-large.mp4",
+    "government_building": "https://assets.mixkit.co/videos/preview/mixkit-white-satellite-radar-dish-23293-large.mp4",
+    "fingerprint_tech": "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-man-using-a-smartphone-4236-large.mp4",
+    "server_room": "https://assets.mixkit.co/videos/preview/mixkit-data-center-server-room-4392-large.mp4",
+    "identity_check": "https://assets.mixkit.co/videos/preview/mixkit-man-having-a-video-call-with-his-doctor-4239-large.mp4"
+  },
+  "music": {
+    "corporate_upbeat": "https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3"
+  },
+  "scene_map": {
+    "s01": "crowd_people",
+    "s02": "technology_data",
+    "s03": "eye_closeup",
+    "s04": "server_room",
+    "s05": "government_building",
+    "s06": "fingerprint_tech",
+    "s07": "business_office"
+  }
+}
