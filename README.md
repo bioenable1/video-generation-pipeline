@@ -23,7 +23,7 @@ Turn a product brief into a finished MP4 with research, shot lists, stock B-roll
 ## Quick start
 
 ```powershell
-git clone https://github.com/YOUR_USERNAME/video-generation-pipeline.git
+git clone https://github.com/bioenable1/video-generation-pipeline.git
 cd Video-Generation
 python -m venv .venv && .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt

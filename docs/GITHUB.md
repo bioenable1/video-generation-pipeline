@@ -27,7 +27,7 @@ gh repo create bioenable-video-generation --public --source=. --remote=origin --
 ## Already have a remote?
 
 ```powershell
-git remote add origin https://github.com/YOUR_USERNAME/video-generation-pipeline.git
+git remote add origin https://github.com/bioenable1/video-generation-pipeline.git
 git branch -M main
 git push -u origin main
 ```
