@@ -24,7 +24,7 @@ Install FFmpeg on Windows: https://www.gyan.dev/ffmpeg/builds/ (essentials build
 ## 1. Clone and install
 
 ```powershell
-git clone https://github.com/YOUR_ORG/Video-Generation.git
+git clone https://github.com/YOUR_USERNAME/video-generation-pipeline.git
 cd Video-Generation
 
 python -m venv .venv
