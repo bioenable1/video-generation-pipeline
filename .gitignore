@@ -6,10 +6,12 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# User projects (sample project is explicitly included below)
+# User projects (sample projects are explicitly included below)
 projects/*
 !projects/iriuniverse2-launch/
 !projects/iriuniverse2-launch/**
+!projects/sleep-tips-social/
+!projects/sleep-tips-social/**
 
 # Regenerable intermediate renders (keep final.mp4, stock, vo)
 projects/*/renders/segments/

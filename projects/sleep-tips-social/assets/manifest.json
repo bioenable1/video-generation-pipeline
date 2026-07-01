@@ -1,0 +1,10 @@
+{
+  "updated_at": "2026-07-01T15:43:19Z",
+  "production_mode": "free",
+  "renderer": "render_free.py",
+  "video_type": "social",
+  "aspect_ratio": "9:16",
+  "brand": "SleepWell",
+  "stock": true,
+  "music": true
+}

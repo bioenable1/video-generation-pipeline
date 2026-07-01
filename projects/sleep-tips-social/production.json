@@ -1,0 +1,15 @@
+{
+  "mode": "free",
+  "video_type": "social",
+  "description": "Set mode to 'paid' for ElevenLabs, VEED, fal.ai",
+  "free": {
+    "tts": "edge-tts",
+    "voice": "en-US-ChristopherNeural",
+    "editor": "ffmpeg"
+  },
+  "paid": {
+    "tts": "elevenlabs",
+    "editor": "veed",
+    "ai_video": "fal.fabric"
+  }
+}

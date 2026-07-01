@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://video-generation.local/schemas/shot-list.json",
-  "title": "Product Video Shot List",
+  "title": "Video Shot List",
   "type": "object",
   "required": ["id", "duration_target_sec", "aspect_ratio", "scenes", "acceptance_criteria"],
   "properties": {
@@ -11,7 +11,13 @@
       "description": "Project slug identifier"
     },
     "title": { "type": "string" },
-    "product": { "type": "string" },
+    "subject": { "type": "string", "description": "Topic, product, or concept" },
+    "product": { "type": "string", "description": "Alias for subject (legacy)" },
+    "video_type": {
+      "type": "string",
+      "enum": ["product", "explainer", "social", "tutorial", "custom"]
+    },
+    "style_reference": { "type": "string", "format": "uri" },
     "duration_target_sec": {
       "type": "integer",
       "minimum": 15,
@@ -66,6 +72,11 @@
         },
         "narration": { "type": "string", "minLength": 1 },
         "on_screen_text": { "type": "string" },
+        "bullets": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "dramatic": { "type": "boolean", "description": "Darker overlay for hook/problem scenes" },
         "visual": {
           "type": "object",
           "required": ["type"],
@@ -77,6 +88,7 @@
                 "stock_photo",
                 "ai_image",
                 "ai_video",
+                "product_image",
                 "product_clip",
                 "screen_recording",
                 "talking_head",
@@ -85,6 +97,7 @@
               ]
             },
             "query": { "type": "string" },
+            "catalog_key": { "type": "string", "description": "Key in templates/stock_catalog.json" },
             "intent": { "type": "string" },
             "prompt": { "type": "string" },
             "source_path": { "type": "string" },

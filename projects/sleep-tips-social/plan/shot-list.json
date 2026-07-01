@@ -1,0 +1,84 @@
+{
+  "id": "sleep-tips-social",
+  "title": "3 Tips for Better Sleep Tonight",
+  "subject": "3 Tips for Better Sleep",
+  "product": "3 Tips for Better Sleep",
+  "video_type": "social",
+  "duration_target_sec": 45,
+  "aspect_ratio": "9:16",
+  "tone": "Punchy, direct, scroll-stopping",
+  "approved": true,
+  "scenes": [
+    {
+      "id": "s01",
+      "duration_sec": 5,
+      "narration": "Stop scrolling. These three sleep habits can change how you feel tomorrow.",
+      "on_screen_text": "3 Sleep Tips",
+      "visual": {
+        "type": "stock_video",
+        "catalog_key": "abstract_motion",
+        "query": "person tired night bedroom"
+      },
+      "dramatic": true
+    },
+    {
+      "id": "s02",
+      "duration_sec": 14,
+      "narration": "Tip one: same bedtime every night, even weekends. Tip two: no screens thirty minutes before bed. Tip three: keep your room cool and dark.",
+      "on_screen_text": "The 3 tips",
+      "visual": {
+        "type": "text_card",
+        "catalog_key": "nature_landscape",
+        "query": "peaceful bedroom night calm"
+      },
+      "bullets": [
+        "Consistent bedtime",
+        "Screen-free wind-down",
+        "Cool, dark room"
+      ]
+    },
+    {
+      "id": "s03",
+      "duration_sec": 12,
+      "narration": "Most people notice better focus within a week. Better sleep is not luck — it is habit.",
+      "on_screen_text": "Results in 7 days",
+      "visual": {
+        "type": "stock_video",
+        "catalog_key": "crowd_people",
+        "query": "morning energy happy person"
+      }
+    },
+    {
+      "id": "s04",
+      "duration_sec": 10,
+      "narration": "Save this and try it tonight. Follow for more wellness tips.",
+      "on_screen_text": "Save & follow",
+      "visual": {
+        "type": "logo_slate",
+        "catalog_key": "urban_city"
+      },
+      "bullets": [
+        "sleepwell.example",
+        "@sleepwelltips"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Hook in first 3 seconds",
+    "All three sleep tips clearly stated",
+    "Vertical 9:16 safe zones respected",
+    "CTA visible in final 5 seconds",
+    "Under 60 seconds total"
+  ],
+  "metadata": {
+    "youtube_title": "3 Tips for Better Sleep Tonight #shorts",
+    "youtube_description": "Simple sleep habits that actually work. Consistent bedtime, screen-free wind-down, cool dark room.",
+    "tags": [
+      "sleep",
+      "wellness",
+      "health tips",
+      "shorts"
+    ]
+  },
+  "approved_at": "2026-07-01T15:41:44Z"
+}

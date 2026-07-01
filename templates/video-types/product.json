@@ -1,0 +1,84 @@
+{
+  "id": "product",
+  "label": "Product marketing",
+  "description": "Problem → solution → how it works → trust → benefits → CTA",
+  "defaults": {
+    "duration_target_sec": 90,
+    "aspect_ratio": "16:9",
+    "tone": "Professional, confident, clear"
+  },
+  "acceptance_criteria": [
+    "Subject or product name appears in first 10 seconds",
+    "Problem and solution are clearly communicated",
+    "Key benefits shown with supporting visuals",
+    "Clear CTA in final 10 seconds",
+    "Professional visual quality throughout"
+  ],
+  "scenes": [
+    {
+      "id": "s01",
+      "duration_sec": 14,
+      "narration": "Every day, organizations face real challenges with {subject}. Manual processes, delays, and errors add up — impacting teams and the people they serve.",
+      "on_screen_text": "The challenge",
+      "visual": { "type": "stock_video", "catalog_key": "crowd_people", "query": "{subject} problem" },
+      "bullets": ["Pain point 1", "Pain point 2", "Pain point 3"],
+      "dramatic": true
+    },
+    {
+      "id": "s02",
+      "duration_sec": 12,
+      "narration": "There has to be a better way. Slow workflows create frustration, rework, and missed opportunities. It is time for a smarter approach.",
+      "on_screen_text": "A smarter approach",
+      "visual": { "type": "stock_video", "catalog_key": "urban_city", "query": "frustration workflow" },
+      "dramatic": true
+    },
+    {
+      "id": "s03",
+      "duration_sec": 14,
+      "narration": "Introducing {subject} — built to solve exactly these problems with a focus on speed, reliability, and ease of use.",
+      "on_screen_text": "Introducing {subject}",
+      "visual": { "type": "product_image", "source_path": "assets/images/hero.png", "catalog_key": "technology_data", "query": "{subject}" },
+      "bullets": ["Key differentiator 1", "Key differentiator 2"]
+    },
+    {
+      "id": "s04",
+      "duration_sec": 16,
+      "narration": "Here is how it works. Simple setup, intuitive operation, and results you can measure from day one.",
+      "on_screen_text": "How it works",
+      "visual": { "type": "product_image", "source_path": "assets/images/feature-1.png", "catalog_key": "workspace_desk", "query": "how it works demo" },
+      "bullets": ["Step 1", "Step 2", "Step 3"]
+    },
+    {
+      "id": "s05",
+      "duration_sec": 14,
+      "narration": "Built on standards you can trust. Secure, reliable, and designed for real-world conditions.",
+      "on_screen_text": "Built for trust",
+      "visual": { "type": "stock_video", "catalog_key": "server_room", "query": "security trust technology" },
+      "bullets": ["Certification / standard", "Durability", "Safety"]
+    },
+    {
+      "id": "s06",
+      "duration_sec": 12,
+      "narration": "See the difference in action. Faster outcomes, fewer errors, and workflows your team can run confidently.",
+      "on_screen_text": "Results that matter",
+      "visual": { "type": "stock_video", "catalog_key": "business_office", "query": "success business" },
+      "bullets": ["Use case 1", "Use case 2", "Use case 3"]
+    },
+    {
+      "id": "s07",
+      "duration_sec": 12,
+      "narration": "The benefits are clear. Higher efficiency, better quality, and a solution ready when you are.",
+      "on_screen_text": "Key benefits",
+      "visual": { "type": "stock_video", "catalog_key": "abstract_motion", "query": "growth success" },
+      "bullets": ["Benefit 1", "Benefit 2", "Benefit 3"]
+    },
+    {
+      "id": "s08",
+      "duration_sec": 10,
+      "narration": "Ready to get started? {cta}",
+      "on_screen_text": "{website}",
+      "visual": { "type": "logo_slate", "catalog_key": "technology_data" },
+      "bullets": ["{contact}"]
+    }
+  ]
+}

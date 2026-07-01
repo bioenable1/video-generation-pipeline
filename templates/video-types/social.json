@@ -1,0 +1,50 @@
+{
+  "id": "social",
+  "label": "Social short",
+  "description": "Hook → value → proof → CTA (15–60s vertical)",
+  "defaults": {
+    "duration_target_sec": 45,
+    "aspect_ratio": "9:16",
+    "tone": "Punchy, direct, scroll-stopping"
+  },
+  "acceptance_criteria": [
+    "Hook in first 3 seconds",
+    "Single clear message — no clutter",
+    "Vertical 9:16 safe zones respected",
+    "CTA visible in final 5 seconds",
+    "Under 60 seconds total"
+  ],
+  "scenes": [
+    {
+      "id": "s01",
+      "duration_sec": 5,
+      "narration": "Stop scrolling. {subject} changes everything.",
+      "on_screen_text": "{subject}",
+      "visual": { "type": "stock_video", "catalog_key": "abstract_motion", "query": "attention hook vertical" },
+      "dramatic": true
+    },
+    {
+      "id": "s02",
+      "duration_sec": 12,
+      "narration": "Here is the one thing you need to know — and why it matters right now.",
+      "on_screen_text": "The one thing",
+      "visual": { "type": "product_image", "source_path": "assets/images/hero.png", "catalog_key": "technology_data" },
+      "bullets": ["Benefit 1", "Benefit 2"]
+    },
+    {
+      "id": "s03",
+      "duration_sec": 12,
+      "narration": "Proof: real results, real fast. This is not theory — it works.",
+      "on_screen_text": "Proof",
+      "visual": { "type": "stock_video", "catalog_key": "business_office", "query": "success results" }
+    },
+    {
+      "id": "s04",
+      "duration_sec": 10,
+      "narration": "Try it yourself. {cta}",
+      "on_screen_text": "Link in bio",
+      "visual": { "type": "logo_slate", "catalog_key": "urban_city" },
+      "bullets": ["{website}"]
+    }
+  ]
+}

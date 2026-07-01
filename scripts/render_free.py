@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Marketing-quality free renderer: stock footage, product images, Ken Burns,
-lower-thirds, background music, crossfades. No paid APIs required.
+Universal free renderer: stock footage, product images, Ken Burns,
+lower-thirds, background music. Works for any video type and brand.
 """
 
 from __future__ import annotations
@@ -9,7 +9,6 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -18,19 +17,20 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from utils import (
     ROOT,
+    aspect_dimensions,
     ensure_project_dirs,
     is_paid_mode,
+    load_brand,
     load_production_config,
     load_shot_list,
+    parse_brief_urls,
     project_dir,
+    resolve_logo_path,
     save_json,
     utc_now_iso,
 )
 
-W, H = 1920, 1080
 FPS = 30
-FONT = "C\\\\:/Windows/Fonts/arialbd.ttf"
-FONT_REG = "C\\\\:/Windows/Fonts/arial.ttf"
 
 
 def run(cmd: list[str], check: bool = True) -> subprocess.CompletedProcess:
@@ -49,6 +49,15 @@ def probe_duration(path: Path) -> float:
 
 def esc(text: str) -> str:
     return text.replace("\\", "\\\\").replace(":", "\\:").replace("'", "'\\\\\\''").replace("%", "\\%")[:100]
+
+
+def font_path(brand: dict, style: str = "heading") -> str:
+    """FFmpeg drawtext font path (Windows drive colon must be C\\:/...)."""
+    path = brand.get("font", {}).get(style, "C:/Windows/Fonts/arialbd.ttf")
+    path = path.replace("\\", "/")
+    if len(path) > 1 and path[1] == ":":
+        return path[0] + "\\\\:" + path[2:]
+    return path
 
 
 async def tts(text: str, voice: str, out: Path, rate: str = "+8%") -> None:
@@ -75,29 +84,44 @@ def stock_path(slug: str, sid: str) -> Path | None:
     return p if p.exists() and p.stat().st_size > 50000 else None
 
 
-def ken_burns_stock(stock: Path, duration: float, out: Path, headline: str, bullets: list[str], dramatic: bool = False) -> None:
-    """Stock clip with slow zoom + branded lower-third."""
+def ken_burns_stock(
+    stock: Path, duration: float, out: Path, headline: str, bullets: list[str],
+    brand: dict, w: int, h: int, dramatic: bool = False,
+) -> None:
     frames = int(duration * FPS) + 10
-    h = esc(headline)
+    h_esc = esc(headline)
+    primary = brand["colors"]["primary"]
+    accent = brand["colors"]["accent"]
     dim = "eq=brightness=-0.22:saturation=0.85," if dramatic else ""
     lower = (
         f"{dim}"
         f"drawbox=x=0:y=0:w=iw:h=ih:color=black@0.35:t=fill,"
-        f"drawbox=x=0:y=h-210:w=iw:h=210:color=black@0.6:t=fill,"
-        f"drawbox=x=0:y=h-210:w=iw:h=6:color=0x3b82f6:t=fill,"
-        f"drawtext=fontfile={FONT}:text='{h}':fontsize=48:fontcolor=white:"
-        f"x=80:y=h-165:enable='gte(t,0.3)'"
+        f"drawbox=x=0:y=0:w=iw:h=210:color=black@0.6:t=fill,"
+        f"drawbox=x=0:y=0:w=iw:h=6:color={primary}:t=fill,"
+        f"drawtext=fontfile={font_path(brand)}:text='{h_esc}':fontsize=48:fontcolor=white:"
+        f"x=80:y=45:enable='gte(t,0.3)'"
     )
+    bar_h = 210 if h > w else 210
+    if h > w:
+        lower = (
+            f"{dim}"
+            f"drawbox=x=0:y=0:w=iw:h=ih:color=black@0.35:t=fill,"
+            f"drawbox=x=0:y=h-{bar_h}:w=iw:h={bar_h}:color=black@0.6:t=fill,"
+            f"drawbox=x=0:y=h-{bar_h}:w=iw:h=6:color={primary}:t=fill,"
+            f"drawtext=fontfile={font_path(brand)}:text='{h_esc}':fontsize=42:fontcolor=white:"
+            f"x=60:y=h-{bar_h - 45}:enable='gte(t,0.3)'"
+        )
     for i, b in enumerate(bullets[:3]):
         bt = esc(b)
+        y_pos = (h - 120 + i * 38) if h <= w else (h - bar_h + 80 + i * 38)
         lower += (
-            f",drawtext=fontfile={FONT_REG}:text='{chr(0x25C6)}  {bt}':fontsize=30:fontcolor=0x93c5fd:"
-            f"x=100:y={H - 120 + i * 38}:enable='gte(t,0.5)'"
+            f",drawtext=fontfile={font_path(brand, 'body')}:text='{chr(0x25C6)}  {bt}':fontsize=30:fontcolor={accent}:"
+            f"x=100:y={y_pos}:enable='gte(t,0.5)'"
         )
     vf = (
-        f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+        f"[0:v]scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},"
         f"zoompan=z='min(zoom+0.0008,1.15)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':"
-        f"d={frames}:s={W}x{H}:fps={FPS},{lower},"
+        f"d={frames}:s={w}x{h}:fps={FPS},{lower},"
         f"fade=t=in:st=0:d=0.4,fade=t=out:st={max(0, duration - 0.5)}:d=0.5[v]"
     )
     run([
@@ -107,19 +131,22 @@ def ken_burns_stock(stock: Path, duration: float, out: Path, headline: str, bull
     ])
 
 
-def product_composite(stock: Path, product_img: Path, duration: float, out: Path, headline: str) -> None:
-    """Stock background + product image card + headline."""
+def product_composite(
+    stock: Path, product_img: Path, duration: float, out: Path,
+    headline: str, brand: dict, w: int, h: int,
+) -> None:
     if not product_img.exists():
-        ken_burns_stock(stock, duration, out, headline, [])
+        ken_burns_stock(stock, duration, out, headline, [], brand, w, h)
         return
-    h = esc(headline)
+    h_esc = esc(headline)
+    card_w = min(920, w - 80)
     fc = (
-        f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+        f"[0:v]scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},"
         f"eq=brightness=-0.12:saturation=0.95,boxblur=1[bg];"
-        f"[1:v]scale=920:-1,format=rgba[prod];"
+        f"[1:v]scale={card_w}:-1,format=rgba[prod];"
         f"[bg][prod]overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2-30[composed];"
         f"[composed]drawbox=x=0:y=0:w=iw:h=110:color=black@0.55:t=fill,"
-        f"drawtext=fontfile={FONT}:text='{h}':fontsize=42:fontcolor=white:x=70:y=38,"
+        f"drawtext=fontfile={font_path(brand)}:text='{h_esc}':fontsize=42:fontcolor=white:x=70:y=38,"
         f"fade=t=in:st=0:d=0.4,fade=t=out:st={max(0, duration - 0.5)}:d=0.5[v]"
     )
     run([
@@ -130,30 +157,49 @@ def product_composite(stock: Path, product_img: Path, duration: float, out: Path
     ])
 
 
-def logo_outro(stock: Path, logo: Path, duration: float, out: Path, headline: str, bullets: list[str]) -> None:
-    h = esc(headline)
+def text_card(stock: Path, duration: float, out: Path, headline: str, bullets: list[str],
+              brand: dict, w: int, h: int) -> None:
+    ken_burns_stock(stock, duration, out, headline, bullets, brand, w, h, dramatic=True)
+
+
+def logo_outro(
+    stock: Path, logo: Path, duration: float, out: Path,
+    headline: str, bullets: list[str], brand: dict, w: int, h: int,
+) -> None:
+    h_esc = esc(headline)
+    accent = brand["colors"]["accent"]
+    muted = brand["colors"]["text_muted"]
+    tagline = esc(brand.get("tagline", ""))
     bullet_fc = ""
-    for i, b in enumerate(bullets[:2]):
+    for i, b in enumerate(bullets[:3]):
         bt = esc(b)
         bullet_fc += (
-            f",drawtext=fontfile={FONT_REG}:text='{bt}':fontsize=30:fontcolor=0x93c5fd:"
-            f"x=(w-text_w)/2:y={680 + i * 40}"
+            f",drawtext=fontfile={font_path(brand, 'body')}:text='{bt}':fontsize=30:fontcolor={accent}:"
+            f"x=(w-text_w)/2:y={int(h * 0.63) + i * 40}"
         )
-    fc = (
-        f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},eq=brightness=-0.25[bg];"
-        f"[1:v]format=rgba,scale=520:-1[lg];"
-        f"[bg][lg]overlay=(W-w)/2:200[tmp];"
-        f"[tmp]drawtext=fontfile={FONT}:text='{h}':fontsize=52:fontcolor=white:x=(w-text_w)/2:y=580"
-        f"{bullet_fc},"
-        f"drawtext=fontfile={FONT_REG}:text='Identify - Automate - Track':fontsize=28:fontcolor=0x8b9cb3:"
-        f"x=(w-text_w)/2:y=780[v]"
-    )
-    run([
-        "ffmpeg", "-y", "-stream_loop", "-1", "-i", str(stock),
-        "-loop", "1", "-i", str(logo),
-        "-filter_complex", fc, "-map", "[v]", "-t", str(duration),
-        "-c:v", "libx264", "-pix_fmt", "yuv420p", "-an", str(out),
-    ])
+    tagline_fc = ""
+    if tagline:
+        tagline_fc = (
+            f",drawtext=fontfile={font_path(brand, 'body')}:text='{tagline}':fontsize=28:fontcolor={muted}:"
+            f"x=(w-text_w)/2:y={int(h * 0.78)}"
+        )
+    logo_scale = 420 if h > w else 520
+    if logo.exists():
+        fc = (
+            f"[0:v]scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},eq=brightness=-0.25[bg];"
+            f"[1:v]format=rgba,scale={logo_scale}:-1[lg];"
+            f"[bg][lg]overlay=(W-w)/2:{int(h * 0.18)}[tmp];"
+            f"[tmp]drawtext=fontfile={font_path(brand)}:text='{h_esc}':fontsize=52:fontcolor=white:"
+            f"x=(w-text_w)/2:y={int(h * 0.54)}{bullet_fc}{tagline_fc}[v]"
+        )
+        run([
+            "ffmpeg", "-y", "-stream_loop", "-1", "-i", str(stock),
+            "-loop", "1", "-i", str(logo),
+            "-filter_complex", fc, "-map", "[v]", "-t", str(duration),
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-an", str(out),
+        ])
+    else:
+        ken_burns_stock(stock, duration, out, headline, bullets, brand, w, h)
 
 
 def mux_av(video: Path, audio: Path, out: Path) -> None:
@@ -161,27 +207,57 @@ def mux_av(video: Path, audio: Path, out: Path) -> None:
          "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", str(out)])
 
 
-def render_scene(slug: str, scene: dict, logo: Path, seg_dir: Path) -> Path:
+def resolve_product_image(slug: str, scene: dict) -> Path:
+    base = project_dir(slug)
+    src = scene.get("visual", {}).get("source_path", "")
+    if src:
+        p = base / src
+        if p.exists():
+            return p
+    sid = scene["id"]
+    for candidate in (
+        base / "assets" / "images" / f"{sid}.png",
+        base / "assets" / "images" / "hero.png",
+    ):
+        if candidate.exists():
+            return candidate
+    return base / "assets" / "images" / "hero.png"
+
+
+def render_scene(slug: str, scene: dict, logo: Path, seg_dir: Path,
+                 brand: dict, w: int, h: int) -> Path:
     sid = scene["id"]
     vo = project_dir(slug) / "assets" / "vo" / f"{sid}.mp3"
     dur = probe_duration(vo) + 0.4
     stock = stock_path(slug, sid)
     if not stock:
-        raise FileNotFoundError(f"No stock for {sid} — run fetch_free_stock.py first")
+        raise FileNotFoundError(f"No stock for {sid} — run: python run.py generate-assets --project {slug}")
 
     silent = seg_dir / f"{sid}_v.mp4"
     vtype = scene.get("visual", {}).get("type", "stock_video")
     headline = scene.get("on_screen_text", "")
     bullets = scene.get("bullets", [])
+    dramatic = scene.get("dramatic", sid in ("s01", "s02"))
 
     if vtype == "logo_slate":
-        logo_outro(stock, logo, dur, silent, headline, bullets)
-    elif vtype == "product_image":
-        prod = project_dir(slug) / scene["visual"].get("source_path", "")
-        product_composite(stock, prod, dur, silent, headline)
+        logo_outro(stock, logo, dur, silent, headline, bullets, brand, w, h)
+    elif vtype in ("product_image", "ai_image"):
+        prod = resolve_product_image(slug, scene)
+        product_composite(stock, prod, dur, silent, headline, brand, w, h)
+    elif vtype == "text_card":
+        text_card(stock, dur, silent, headline, bullets, brand, w, h)
+    elif vtype == "screen_recording":
+        clip = project_dir(slug) / scene.get("visual", {}).get("source_path", "")
+        if clip.exists() and clip.suffix == ".mp4":
+            run([
+                "ffmpeg", "-y", "-i", str(clip),
+                "-vf", f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2",
+                "-t", str(dur), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-an", str(silent),
+            ])
+        else:
+            product_composite(stock, resolve_product_image(slug, scene), dur, silent, headline, brand, w, h)
     else:
-        dramatic = sid in ("s01", "s02")
-        ken_burns_stock(stock, dur, silent, headline, bullets, dramatic=dramatic)
+        ken_burns_stock(stock, dur, silent, headline, bullets, brand, w, h, dramatic=dramatic)
 
     out = seg_dir / f"{sid}.mp4"
     mux_av(silent, vo, out)
@@ -211,28 +287,46 @@ def concat_with_music(segments: list[Path], music: Path | None, out: Path) -> No
         draft.rename(out)
 
 
-def render_free(slug: str, force: bool = False) -> Path:
+def optional_research(slug: str) -> None:
+    """Run transcript research only when brief has YouTube reference URLs."""
+    shot_list = load_shot_list(slug)
+    urls = []
+    ref = shot_list.get("style_reference", "")
+    if ref and "youtube" in ref:
+        urls.append(ref)
+    urls.extend(u for u in parse_brief_urls(project_dir(slug) / "brief.md") if "youtube" in u.lower())
+    urls = list(dict.fromkeys(urls))
+    if not urls:
+        return
+    print("  Research (YouTube refs from brief)")
+    subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "research.py"), "--project", slug, "--urls", *urls],
+        check=False,
+    )
+
+
+def render_free(slug: str, force: bool = False, skip_assets: bool = False) -> Path:
     if is_paid_mode(slug):
         print("Paid mode — use voiceover + veed scripts")
         sys.exit(1)
 
     cfg = load_production_config(slug)
     voice = cfg.get("free", {}).get("voice", "en-US-ChristopherNeural")
+    shot_list = load_shot_list(slug)
+    brand = load_brand(slug)
+    w, h = aspect_dimensions(shot_list.get("aspect_ratio", "16:9"))
     base = ensure_project_dirs(slug)
-    logo = base / "assets" / "brand" / "logo-dark-bg.png"
-    if not logo.exists():
-        logo = base / "assets" / "brand" / "logo-transparent.png"
+    logo = resolve_logo_path(slug, brand)
 
-    # Prerequisite steps
-    print("=== Marketing render (free) ===")
-    print("1. Extract assets + stock + research")
-    subprocess.run([sys.executable, str(ROOT / "scripts" / "extract_assets.py"), "--project", slug], check=False)
-    subprocess.run([sys.executable, str(ROOT / "scripts" / "fetch_free_stock.py"), "--project", slug], check=False)
-    subprocess.run([
-        sys.executable, str(ROOT / "scripts" / "research.py"), "--project", slug,
-        "--urls", "https://www.youtube.com/watch?v=d58Kduairis",
-        "https://www.youtube.com/watch?v=e_04ZrNroTo",
-    ], check=False)
+    print(f"=== Render (free) — {shot_list.get('video_type', 'custom')} {w}x{h} ===")
+
+    if not skip_assets:
+        print("1. Assets")
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "generate_assets.py"), "--project", slug],
+            check=False,
+        )
+        optional_research(slug)
 
     print("2. Voiceover")
     generate_vo(slug, voice, force=force)
@@ -245,9 +339,9 @@ def render_free(slug: str, force: bool = False) -> Path:
 
     print("3. Scene composites")
     segments = []
-    for scene in load_shot_list(slug)["scenes"]:
+    for scene in shot_list["scenes"]:
         print(f"  {scene['id']}")
-        segments.append(render_scene(slug, scene, logo, seg_dir))
+        segments.append(render_scene(slug, scene, logo, seg_dir, brand, w, h))
 
     music = base / "assets" / "music" / "background.mp3"
     final = base / "renders" / "final.mp4"
@@ -257,7 +351,10 @@ def render_free(slug: str, force: bool = False) -> Path:
     save_json(base / "assets" / "manifest.json", {
         "updated_at": utc_now_iso(),
         "production_mode": "free",
-        "renderer": "render_free.py (marketing)",
+        "renderer": "render_free.py",
+        "video_type": shot_list.get("video_type"),
+        "aspect_ratio": shot_list.get("aspect_ratio"),
+        "brand": brand.get("name"),
         "stock": True,
         "music": music.exists(),
     })
@@ -269,8 +366,9 @@ def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--project", required=True)
     p.add_argument("--force", action="store_true", help="Regenerate VO and segments")
+    p.add_argument("--skip-assets", action="store_true", help="Skip generate-assets step")
     args = p.parse_args()
-    render_free(args.project, force=args.force)
+    render_free(args.project, force=args.force, skip_assets=args.skip_assets)
 
 
 if __name__ == "__main__":

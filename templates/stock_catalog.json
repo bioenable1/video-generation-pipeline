@@ -1,26 +1,22 @@
 {
-  "note": "Curated free stock (Mixkit/Pexels CDN). No API key required.",
+  "note": "Curated free stock (Pexels CDN). No API key required. Use catalog_key in shot-list scenes.",
   "videos": {
-    "security_entrance": "https://assets.mixkit.co/videos/preview/mixkit-security-camera-surveilling-a-hall-4288-large.mp4",
-    "technology_data": "https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-monitor-close-up-1728-large.mp4",
-    "business_office": "https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4",
-    "crowd_people": "https://assets.mixkit.co/videos/preview/mixkit-people-walking-in-the-street-4374-large.mp4",
-    "eye_closeup": "https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-womans-blue-eye-4231-large.mp4",
-    "government_building": "https://assets.mixkit.co/videos/preview/mixkit-white-satellite-radar-dish-23293-large.mp4",
-    "fingerprint_tech": "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-man-using-a-smartphone-4236-large.mp4",
-    "server_room": "https://assets.mixkit.co/videos/preview/mixkit-data-center-server-room-4392-large.mp4",
-    "identity_check": "https://assets.mixkit.co/videos/preview/mixkit-man-having-a-video-call-with-his-doctor-4239-large.mp4"
+    "abstract_motion": "https://videos.pexels.com/video-files/3129957/3129957-uhd_2560_1440_25fps.mp4",
+    "business_office": "https://videos.pexels.com/video-files/3129957/3129957-uhd_2560_1440_25fps.mp4",
+    "crowd_people": "https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4",
+    "eye_closeup": "https://videos.pexels.com/video-files/3255275/3255275-uhd_2560_1440_25fps.mp4",
+    "fingerprint_tech": "https://videos.pexels.com/video-files/2098989/2098989-hd_1920_1080_30fps.mp4",
+    "government_building": "https://videos.pexels.com/video-files/3045163/3045163-hd_1920_1080_25fps.mp4",
+    "nature_landscape": "https://videos.pexels.com/video-files/856973/856973-uhd_2560_1440_25fps.mp4",
+    "server_room": "https://videos.pexels.com/video-files/856973/856973-uhd_2560_1440_25fps.mp4",
+    "technology_data": "https://videos.pexels.com/video-files/3129957/3129957-uhd_2560_1440_25fps.mp4",
+    "urban_city": "https://videos.pexels.com/video-files/3045163/3045163-hd_1920_1080_25fps.mp4",
+    "workspace_desk": "https://videos.pexels.com/video-files/2098989/2098989-hd_1920_1080_30fps.mp4"
   },
   "music": {
-    "corporate_upbeat": "https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3"
+    "default": "https://cdn.pixabay.com/download/audio/2022/03/15/audio_8cb7499b14.mp3",
+    "upbeat": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    "calm": "https://cdn.pixabay.com/download/audio/2022/03/15/audio_8cb7499b14.mp3"
   },
-  "scene_map": {
-    "s01": "crowd_people",
-    "s02": "technology_data",
-    "s03": "eye_closeup",
-    "s04": "server_room",
-    "s05": "government_building",
-    "s06": "fingerprint_tech",
-    "s07": "business_office"
-  }
+  "query_fallback": "technology_data"
 }

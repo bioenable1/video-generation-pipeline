@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract product images from brochure PDF and BioEnable website."""
+"""Extract images from project source materials (PDF, website URLs in brief)."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from utils import project_dir
+from utils import parse_brief_urls, project_dir
 
 
 def pdf_to_images(pdf: Path, out_dir: Path) -> list[Path]:
@@ -32,7 +32,6 @@ def pdf_to_images(pdf: Path, out_dir: Path) -> list[Path]:
 def scrape_website_images(url: str, out_dir: Path) -> list[Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     html = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"}).text
-    # Google Sites / embedded images
     patterns = [
         r'https://[^\s"\'<>]+\.(?:jpg|jpeg|png|webp)(?:\?[^\s"\'<>]*)?',
         r'https://lh3\.googleusercontent\.com/[^\s"\'<>]+',
@@ -59,21 +58,30 @@ def scrape_website_images(url: str, out_dir: Path) -> list[Path]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--project", required=True)
+    parser.add_argument("--url", action="append", help="Website URL to scrape (overrides brief)")
     args = parser.parse_args()
 
     base = project_dir(args.project)
     img_dir = base / "assets" / "images"
+    source_dir = base / "assets" / "source"
 
-    brochure = base / "assets" / "brochure.pdf"
-    if brochure.exists():
-        pages = pdf_to_images(brochure, img_dir / "brochure")
-        print(f"Brochure: {len(pages)} pages -> {img_dir / 'brochure'}")
+    for pdf in list(base.glob("assets/**/*.pdf")) + list(source_dir.glob("*.pdf")):
+        rel = pdf.relative_to(base)
+        out_name = "brochure" if "brochure" in pdf.name.lower() else pdf.stem
+        pages = pdf_to_images(pdf, img_dir / out_name)
+        print(f"PDF {rel}: {len(pages)} pages -> {img_dir / out_name}")
 
-    web = scrape_website_images(
-        "https://www.bioenabletech.com/iriuniverse-two-dual-iris-scanner",
-        img_dir / "website",
-    )
-    print(f"Website: {len(web)} images -> {img_dir / 'website'}")
+    urls = args.url or []
+    if not urls:
+        urls = [u for u in parse_brief_urls(base / "brief.md") if "youtube" not in u.lower()]
+
+    for i, url in enumerate(urls):
+        sub = img_dir / f"website-{i + 1}" if len(urls) > 1 else img_dir / "website"
+        web = scrape_website_images(url, sub)
+        print(f"Website {url}: {len(web)} images -> {sub}")
+
+    if not urls and not list(base.glob("assets/**/*.pdf")):
+        print("No source PDFs or website URLs found — add to brief.md or assets/source/")
 
 
 if __name__ == "__main__":

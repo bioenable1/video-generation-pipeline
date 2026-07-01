@@ -170,14 +170,13 @@ Brief → Research → Plan (HTML) → [APPROVAL] → Script → Assets → Edit
 
 ### Project skill (auto-loaded)
 
-`.cursor/skills/product-video-pipeline/SKILL.md` — orchestrates the full pipeline with phase gates.
+`.cursor/skills/video-pipeline/SKILL.md` — universal pipeline for any subject and video type (product, explainer, social, tutorial).
 
 **Agent prompt:**
 ```
-Create a product marketing video for [product].
-Brief: projects/my-slug/brief.md
-Reference style: https://www.youtube.com/watch?v=d58Kduairis
-Follow product-video-pipeline skill.
+Create an [explainer|product|social|tutorial] video about [subject].
+python run.py new-project --subject "[subject]" --type explainer --slug my-slug
+Follow video-pipeline skill.
 ```
 
 ### MCP servers (optional)
@@ -209,20 +208,19 @@ Free mode works with **none** of these set.
 ## 8. Creating a new video from scratch
 
 ```powershell
-python run.py new-project --product "IriUniverse Two" --slug iriuniverse2-launch-v2
+# Any subject — pick a video type
+python run.py new-project --subject "Solar energy basics" --type explainer --slug solar-explainer
 
-# Edit projects/iriuniverse2-launch-v2/brief.md
-# Add scenes to plan/shot-list.json (or let the agent write them)
-# Validate and approve:
-python run.py validate --project iriuniverse2-launch-v2
-python run.py approve --project iriuniverse2-launch-v2
+# Edit projects/solar-explainer/brief.md and brand.json
+# Customize plan/shot-list.json (preset scenes included)
+python run.py validate --project solar-explainer
+python run.py approve --project solar-explainer
 
-# One-command render (free):
-python run.py render --project iriuniverse2-launch-v2 --force
+python run.py generate-assets --project solar-explainer
+python run.py render --project solar-explainer --force
 ```
 
-**Style reference:** Save YouTube benchmark URLs; agent writes `research/reference-style-*.md`.  
-Example benchmark: [BioEnable E-Gate video](https://www.youtube.com/watch?v=d58Kduairis) — problem → solution → trust → benefits → CTA.
+**Style reference (optional):** Add YouTube URLs to `brief.md`; agent writes `research/reference-style-*.md`.
 
 ---
 

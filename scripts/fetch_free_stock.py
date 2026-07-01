@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Download Pexels CDN stock OR generate Ken Burns clips from product images."""
+"""Download Pexels CDN stock or generate Ken Burns clips from scene-configured sources."""
 
 from __future__ import annotations
 
@@ -12,46 +12,19 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from utils import ROOT, load_env, load_shot_list, project_dir, save_json, utc_now_iso
+from utils import (
+    load_env,
+    load_shot_list,
+    load_stock_catalog,
+    project_dir,
+    save_json,
+    utc_now_iso,
+)
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
-# Verified working Pexels CDN URLs (no API key)
-PEXELS_VIDEOS = {
-    "crowd_people": "https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4",
-    "technology_data": "https://videos.pexels.com/video-files/3129957/3129957-uhd_2560_1440_25fps.mp4",
-    "eye_closeup": "https://videos.pexels.com/video-files/3255275/3255275-uhd_2560_1440_25fps.mp4",
-    "server_room": "https://videos.pexels.com/video-files/856973/856973-uhd_2560_1440_25fps.mp4",
-    "government_building": "https://videos.pexels.com/video-files/3045163/3045163-hd_1920_1080_25fps.mp4",
-    "fingerprint_tech": "https://videos.pexels.com/video-files/2098989/2098989-hd_1920_1080_30fps.mp4",
-    "business_office": "https://videos.pexels.com/video-files/3129957/3129957-uhd_2560_1440_25fps.mp4",
-}
 
-# Product images from BioEnable site/brochure as fallback per scene
-IMAGE_FALLBACK = {
-    "s01": "assets/images/website/web-04.png",
-    "s02": "assets/images/website/web-12.png",
-    "s03": "assets/images/brochure/brochure-page1.png",
-    "s04": "assets/images/website/web-01.png",
-    "s05": "assets/images/brochure/brochure-page3.png",
-    "s06": "assets/images/brochure/brochure-page2.png",
-    "s07": "assets/images/website/web-02.png",
-    "s08": "assets/images/website/web-02.png",
-}
-
-SCENE_MAP = {
-    "s01": "crowd_people",
-    "s02": "government_building",
-    "s03": "technology_data",
-    "s04": "eye_closeup",
-    "s05": "server_room",
-    "s06": "fingerprint_tech",
-    "s07": "business_office",
-    "s08": "technology_data",
-}
-
-
-def download_video(url: str, dest: Path) -> bool:
+def download_file(url: str, dest: Path) -> bool:
     try:
         r = requests.get(url, headers=HEADERS, timeout=180, stream=True)
         if r.status_code != 200:
@@ -67,8 +40,8 @@ def download_video(url: str, dest: Path) -> bool:
 
 
 def image_to_stock(image: Path, dest: Path, duration: float = 12.0) -> bool:
-    """Ken Burns motion from product still."""
     import subprocess
+
     if not image.exists():
         return False
     frames = int(duration * 30)
@@ -89,25 +62,54 @@ def image_to_stock(image: Path, dest: Path, duration: float = 12.0) -> bool:
     return dest.stat().st_size > 50000
 
 
-def fetch_pexels_api(query: str, dest: Path) -> bool:
+def fetch_pexels_api(query: str, dest: Path, orientation: str = "landscape") -> bool:
     api_key = os.environ.get("PEXELS_API_KEY", "")
-    if not api_key:
+    if not api_key or not query:
         return False
     try:
         resp = requests.get(
             "https://api.pexels.com/v1/videos/search",
             headers={"Authorization": api_key},
-            params={"query": query, "per_page": 5, "orientation": "landscape"},
+            params={"query": query, "per_page": 5, "orientation": orientation},
             timeout=30,
         )
         resp.raise_for_status()
         for v in resp.json().get("videos", []):
             files = [f for f in v.get("video_files", []) if "mp4" in f.get("file_type", "")]
-            if files and download_video(max(files, key=lambda f: f.get("width", 0))["link"], dest):
+            if files and download_file(
+                max(files, key=lambda f: f.get("width", 0))["link"], dest
+            ):
                 return True
     except Exception as exc:
         print(f"    Pexels API: {exc}")
     return False
+
+
+def resolve_catalog_key(scene: dict, catalog: dict) -> str:
+    visual = scene.get("visual", {})
+    key = visual.get("catalog_key", "")
+    if key and key in catalog.get("videos", {}):
+        return key
+    return catalog.get("query_fallback", "technology_data")
+
+
+def find_fallback_image(base: Path, scene: dict) -> Path | None:
+    visual = scene.get("visual", {})
+    src = visual.get("source_path", "")
+    if src:
+        p = base / src
+        if p.exists():
+            return p
+    sid = scene["id"]
+    for pattern in (
+        base / "assets" / "images" / f"{sid}.png",
+        base / "assets" / "images" / "hero.png",
+        base / "assets" / "images" / "website" / "web-01.png",
+        base / "assets" / "images" / "brochure" / "brochure-page1.png",
+    ):
+        if pattern.exists():
+            return pattern
+    return None
 
 
 def main() -> None:
@@ -119,52 +121,58 @@ def main() -> None:
     base = project_dir(args.project)
     stock_dir = base / "assets" / "stock"
     shot_list = load_shot_list(args.project)
+    catalog = load_stock_catalog()
+    videos = catalog.get("videos", {})
+    orientation = "portrait" if shot_list.get("aspect_ratio") == "9:16" else "landscape"
     manifest_scenes = {}
 
     for scene in shot_list["scenes"]:
         sid = scene["id"]
         dest = stock_dir / f"{sid}.mp4"
         query = scene.get("visual", {}).get("query", "")
-        key = SCENE_MAP.get(sid, "technology_data")
+        key = resolve_catalog_key(scene, catalog)
 
         print(f"  {sid}:")
         ok = False
+        source = None
+
         if query:
-            ok = fetch_pexels_api(query, dest)
+            ok = fetch_pexels_api(query, dest, orientation=orientation)
+            if ok:
+                source = "pexels_api"
 
         if not ok:
-            url = PEXELS_VIDEOS.get(key)
+            url = videos.get(key)
             if url:
                 print(f"    Pexels CDN ({key})...")
-                ok = download_video(url, dest)
+                ok = download_file(url, dest)
+                if ok:
+                    source = "pexels_cdn"
 
         if not ok:
-            img_rel = IMAGE_FALLBACK.get(sid, "")
-            img = base / img_rel if img_rel else None
-            if img and img.exists():
-                print(f"    Product image Ken Burns: {img.name}")
+            img = find_fallback_image(base, scene)
+            if img:
+                print(f"    Image Ken Burns: {img.name}")
                 ok = image_to_stock(img, dest)
+                if ok:
+                    source = "product_image"
 
         if ok:
             manifest_scenes[sid] = {
                 "selected": f"assets/stock/{sid}.mp4",
-                "source": "pexels_cdn" if key in PEXELS_VIDEOS else "product_image",
+                "catalog_key": key,
+                "source": source,
             }
         else:
             print(f"    FAILED — no stock for {sid}")
 
-    # Free background music from incompetech or freemusic archive - try pixabay music CDN
     music_dir = base / "assets" / "music"
     music_dir.mkdir(parents=True, exist_ok=True)
     music_path = music_dir / "background.mp3"
     if not music_path.exists():
-        # Pixabay free music direct (no key needed for some tracks)
-        music_urls = [
-            "https://cdn.pixabay.com/download/audio/2022/03/15/audio_8cb7499b14.mp3",
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-        ]
+        music_urls = list(catalog.get("music", {}).values())
         for mu in music_urls:
-            if download_video(mu, music_path):
+            if download_file(mu, music_path):
                 print("  Background music downloaded")
                 break
 

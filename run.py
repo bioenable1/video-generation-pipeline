@@ -12,12 +12,13 @@ SCRIPTS = Path(__file__).resolve().parent / "scripts"
 USAGE = """Usage: python run.py <command> [args]
 
 Commands:
-  new-project       Create a new video project
+  new-project       Create a new video project (any type)
   research          YouTube transcript research
   validate          Validate shot-list.json
   plan              Generate content-plan.html
   approve           Approve shot list
   script            Generate script.md + vo-segments.json
+  generate-assets   Fetch stock, extract sources, AI prompt manifest
   voiceover         ElevenLabs voiceover (--dry-run supported)
   pexels            Fetch Pexels stock video
   veed              VEED/fal.ai client (assemble, fabric, lipsync, poll)
@@ -27,8 +28,9 @@ Commands:
   set-mode          Switch free/paid production mode
 
 Example:
-  python run.py new-project --product "Iriuniverse 2" --slug iriuniverse2-launch
-  python run.py research --project iriuniverse2-launch --urls https://youtube.com/...
+  python run.py new-project --subject "My App" --type explainer --slug my-app-explainer
+  python run.py generate-assets --project my-app-explainer
+  python run.py render --project my-app-explainer --force
 """
 
 MAP = {
@@ -45,6 +47,7 @@ MAP = {
     "thumbnail": "generate_thumbnail.py",
     "render": "render_free.py",
     "fetch-stock": "fetch_free_stock.py",
+    "generate-assets": "generate_assets.py",
     "extract-assets": "extract_assets.py",
     "set-mode": "set_mode.py",
 }

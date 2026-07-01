@@ -1,0 +1,71 @@
+{
+  "id": "tutorial",
+  "label": "How-to tutorial",
+  "description": "Outcome promise → prerequisites → steps → tips → recap",
+  "defaults": {
+    "duration_target_sec": 180,
+    "aspect_ratio": "16:9",
+    "tone": "Friendly, step-by-step, practical"
+  },
+  "acceptance_criteria": [
+    "Outcome stated in first 10 seconds",
+    "Each step is numbered and actionable",
+    "Screen or demo visuals for key steps",
+    "Tips or pitfalls mentioned",
+    "Recap with next steps"
+  ],
+  "scenes": [
+    {
+      "id": "s01",
+      "duration_sec": 12,
+      "narration": "In this tutorial, you will learn how to {subject}. By the end, you will be able to do it confidently on your own.",
+      "on_screen_text": "How to: {subject}",
+      "visual": { "type": "stock_video", "catalog_key": "workspace_desk", "query": "tutorial learning" }
+    },
+    {
+      "id": "s02",
+      "duration_sec": 14,
+      "narration": "Before we start, make sure you have everything ready. Here is what you need.",
+      "on_screen_text": "What you need",
+      "visual": { "type": "text_card", "catalog_key": "technology_data" },
+      "bullets": ["Prerequisite 1", "Prerequisite 2", "Prerequisite 3"]
+    },
+    {
+      "id": "s03",
+      "duration_sec": 20,
+      "narration": "Step one. Start with the basics — set up your environment and open the right tool.",
+      "on_screen_text": "Step 1",
+      "visual": { "type": "screen_recording", "source_path": "assets/clips/step-01.mp4", "catalog_key": "workspace_desk", "query": "computer setup" }
+    },
+    {
+      "id": "s04",
+      "duration_sec": 22,
+      "narration": "Step two. Follow along carefully. This is where most of the work happens.",
+      "on_screen_text": "Step 2",
+      "visual": { "type": "screen_recording", "source_path": "assets/clips/step-02.mp4", "catalog_key": "technology_data" }
+    },
+    {
+      "id": "s05",
+      "duration_sec": 20,
+      "narration": "Step three. Finish up and verify your result. You should see the expected outcome.",
+      "on_screen_text": "Step 3",
+      "visual": { "type": "screen_recording", "source_path": "assets/clips/step-03.mp4", "catalog_key": "abstract_motion" }
+    },
+    {
+      "id": "s06",
+      "duration_sec": 14,
+      "narration": "Pro tip: avoid these common mistakes. They will save you time and frustration.",
+      "on_screen_text": "Pro tips",
+      "visual": { "type": "stock_video", "catalog_key": "urban_city", "query": "tips advice" },
+      "bullets": ["Tip 1", "Tip 2"]
+    },
+    {
+      "id": "s07",
+      "duration_sec": 12,
+      "narration": "That is it. You now know how to {subject}. {cta}",
+      "on_screen_text": "You did it!",
+      "visual": { "type": "logo_slate", "catalog_key": "business_office" },
+      "bullets": ["{website}"]
+    }
+  ]
+}

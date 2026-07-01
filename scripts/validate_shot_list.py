@@ -43,8 +43,10 @@ def validate_business_rules(data: dict) -> list[str]:
     for scene in scenes:
         visual = scene.get("visual", {})
         vtype = visual.get("type")
-        if vtype in ("stock_video", "stock_photo") and not visual.get("query"):
-            errors.append(f"{scene.get('id')}: stock visual requires query")
+        if vtype in ("stock_video", "stock_photo") and not (
+            visual.get("query") or visual.get("catalog_key")
+        ):
+            errors.append(f"{scene.get('id')}: stock visual requires query or catalog_key")
         if vtype == "ai_image" and not (visual.get("prompt") or visual.get("intent")):
             errors.append(f"{scene.get('id')}: ai_image requires prompt or intent")
 

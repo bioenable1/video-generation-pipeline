@@ -1,0 +1,21 @@
+{
+  "name": "SleepWell",
+  "tagline": "Rest better, live better",
+  "colors": {
+    "primary": "0x7c3aed",
+    "accent": "0xc4b5fd",
+    "text_muted": "0xa78bfa",
+    "background": "0x1e1b4b",
+    "overlay": "black@0.35"
+  },
+  "logo": {
+    "dark": "assets/brand/logo-dark-bg.png",
+    "light": "assets/brand/logo-transparent.png"
+  },
+  "website": "sleepwell.example",
+  "contact": "@sleepwelltips",
+  "font": {
+    "heading": "C:/Windows/Fonts/arialbd.ttf",
+    "body": "C:/Windows/Fonts/arial.ttf"
+  }
+}

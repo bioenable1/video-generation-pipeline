@@ -1,0 +1,72 @@
+{
+  "id": "explainer",
+  "label": "Educational explainer",
+  "description": "Hook → context → concept → examples → summary",
+  "defaults": {
+    "duration_target_sec": 120,
+    "aspect_ratio": "16:9",
+    "tone": "Clear, engaging, educational"
+  },
+  "acceptance_criteria": [
+    "Hook captures attention in first 5 seconds",
+    "Core concept explained in plain language",
+    "At least one concrete example or analogy",
+    "Summary reinforces key takeaway",
+    "Pacing suitable for 130–150 WPM narration"
+  ],
+  "scenes": [
+    {
+      "id": "s01",
+      "duration_sec": 10,
+      "narration": "Have you ever wondered about {subject}? In the next few minutes, you will understand what it is, why it matters, and how it applies to you.",
+      "on_screen_text": "Understanding {subject}",
+      "visual": { "type": "stock_video", "catalog_key": "abstract_motion", "query": "curiosity question" },
+      "dramatic": true
+    },
+    {
+      "id": "s02",
+      "duration_sec": 18,
+      "narration": "Let us start with context. {subject} affects how we work, learn, and solve problems every day — often in ways we do not notice.",
+      "on_screen_text": "Why this matters",
+      "visual": { "type": "stock_video", "catalog_key": "crowd_people", "query": "everyday life context" }
+    },
+    {
+      "id": "s03",
+      "duration_sec": 22,
+      "narration": "At its core, {subject} is about one simple idea. Break it down: what is the problem, what is the mechanism, and what changes when you apply it?",
+      "on_screen_text": "The core idea",
+      "visual": { "type": "ai_image", "prompt": "Clean infographic diagram explaining {subject}, minimal flat design, 16:9", "catalog_key": "technology_data" },
+      "bullets": ["Definition", "Mechanism", "Outcome"]
+    },
+    {
+      "id": "s04",
+      "duration_sec": 20,
+      "narration": "Here is a real-world example. Imagine a typical scenario where {subject} makes a measurable difference.",
+      "on_screen_text": "Example",
+      "visual": { "type": "stock_video", "catalog_key": "workspace_desk", "query": "real world example" }
+    },
+    {
+      "id": "s05",
+      "duration_sec": 18,
+      "narration": "Common misconceptions? Let us clear them up. What people often get wrong — and what is actually true.",
+      "on_screen_text": "Myth vs fact",
+      "visual": { "type": "stock_video", "catalog_key": "urban_city", "query": "comparison contrast" }
+    },
+    {
+      "id": "s06",
+      "duration_sec": 16,
+      "narration": "To recap: {subject} is powerful because it connects ideas to action. Remember the core takeaway and apply it where it fits.",
+      "on_screen_text": "Key takeaway",
+      "visual": { "type": "logo_slate", "catalog_key": "abstract_motion" },
+      "bullets": ["Takeaway 1", "Takeaway 2"]
+    },
+    {
+      "id": "s07",
+      "duration_sec": 8,
+      "narration": "{cta}",
+      "on_screen_text": "{website}",
+      "visual": { "type": "logo_slate", "catalog_key": "technology_data" },
+      "bullets": []
+    }
+  ]
+}

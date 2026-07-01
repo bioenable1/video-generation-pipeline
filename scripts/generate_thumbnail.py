@@ -9,13 +9,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from utils import load_shot_list, project_dir
+from utils import load_brand, load_shot_list, project_dir, resolve_logo_path
 
 
-def generate_thumbnail_png(out: Path, title: str, product: str, logo: Path) -> None:
+def generate_thumbnail_png(out: Path, title: str, subject: str, logo: Path, bg_color: str) -> None:
     run_ffmpeg = [
         "ffmpeg", "-y",
-        "-f", "lavfi", "-i", "color=c=0x0f1a2e:s=1280x720:d=1",
+        "-f", "lavfi", "-i", f"color=c={bg_color}:s=1280x720:d=1",
     ]
     if logo.exists():
         title_e = title.replace(":", "\\:").replace("'", "\\'")[:70]
@@ -45,27 +45,29 @@ def main() -> None:
     args = parser.parse_args()
 
     shot_list = load_shot_list(args.project)
+    brand = load_brand(args.project)
     meta = shot_list.get("metadata", {})
     title = meta.get("youtube_title") or shot_list.get("title", args.project)
-    product = shot_list.get("product", args.project)
+    subject = shot_list.get("subject") or shot_list.get("product", args.project)
+    video_type = shot_list.get("video_type", "custom")
     base = project_dir(args.project)
     publish_dir = base / "publish"
     publish_dir.mkdir(parents=True, exist_ok=True)
-    logo = base / "assets" / "brand" / "logo-dark-bg.png"
-    if not logo.exists():
-        logo = base / "assets" / "brand" / "logo-transparent.png"
+    logo = resolve_logo_path(args.project, brand)
+    bg = brand["colors"].get("background", "0x0f1a2e")
 
     if args.format == "png":
         out = publish_dir / "thumbnail.png"
-        generate_thumbnail_png(out, title, product, logo)
+        generate_thumbnail_png(out, title, subject, logo, bg)
         print(f"Wrote {out}")
     elif args.format == "json":
         import json
         spec = {
             "title": title,
-            "product": product,
+            "subject": subject,
+            "video_type": video_type,
             "dimensions": "1280x720",
-            "prompt": f"Professional YouTube thumbnail for {product}, STQC certified dual iris scanner, BioEnable branding",
+            "prompt": f"Professional YouTube thumbnail for {subject}, {video_type} video, bold readable text",
         }
         spec_path = publish_dir / "thumbnail-spec.json"
         spec_path.write_text(json.dumps(spec, indent=2) + "\n", encoding="utf-8")
